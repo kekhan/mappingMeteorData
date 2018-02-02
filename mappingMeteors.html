@@ -7,17 +7,33 @@
     	<div id ="wrapper"></div>
     	<script src = "http://d3js.org/d3.v3.min.js"></script>
     	<script type="text/javascript">
-    	    var url = "";
-    	    var width = 500;
-    	    var height = 500;
-    	    var padding = 50;
-    	    var margin = 50;
+    	    var url = "https://raw.githubusercontent.com/FreeCodeCamp/ProjectReferenceData/master/meteorite-strike-data.json";
+            //var geoUrl = "https://giottojs.org/geo/world-110m.json";
+    	    var width = 800;
+    	    var height = 600;
+    	    var padding = 100;
+    	    var margin = 100;
     	    var svg = d3.select("#wrapper")
     	                .append('svg')
-    	                .attr('width',width)
-    	                .attr('height',height)
+    	                .attr('width',width + padding + margin)
+    	                .attr('height',height + padding + margin)
     	                .append('g')
     	                .attr('transforn','translate('+ padding +','+ padding +')');
+            var projection = d3.geo.albersUsa()
+            .translate([width/2, height/2]);
+            var aProjection = d3.geo.mercator();
+            // geoPath helped show all points
+            var geoPath = d3.geo.path().projection(aProjection);
+            d3.json(url,function(json){
+                //console.log(json.objects.countries.geometries);
+                svg.selectAll('path')
+                    .data(json.features)
+                    .enter().append('path')
+                    .attr("d", geoPath);
+                    
+
+            });
+
 
     	</script>
     </body>
