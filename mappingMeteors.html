@@ -2,37 +2,71 @@
 <html>
     <head>
     	<title>Mapping Meteors Across the Globe</title>
+        <style type="text/css">
+        body{
+            background-color: blue;
+        }
+        h1{
+            color:white;
+            text-align: center;
+        }
+        </style>
     </head>
     <body>
-    	<div id ="wrapper"></div>
+
+    	<div id ="wrapper">
+            <h1>Meteors Across the Globe</h1>
+        </div>
     	<script src = "http://d3js.org/d3.v3.min.js"></script>
     	<script type="text/javascript">
     	    var url = "https://raw.githubusercontent.com/FreeCodeCamp/ProjectReferenceData/master/meteorite-strike-data.json";
-            //var geoUrl = "https://giottojs.org/geo/world-110m.json";
     	    var width = 800;
     	    var height = 600;
-    	    var padding = 100;
-    	    var margin = 100;
+    	    var padding = 50;
+    	    var margin = 50;
+            var aProjection = d3.geo.mercator()
+                .scale(150)
+                .translate([width / 2, height / 2]);
+            var geoPath = d3.geo.path().projection(aProjection);
     	    var svg = d3.select("#wrapper")
     	                .append('svg')
     	                .attr('width',width + padding + margin)
     	                .attr('height',height + padding + margin)
     	                .append('g')
     	                .attr('transforn','translate('+ padding +','+ padding +')');
-            var projection = d3.geo.albersUsa()
-            .translate([width/2, height/2]);
-            var aProjection = d3.geo.mercator();
-            // geoPath helped show all points
-            var geoPath = d3.geo.path().projection(aProjection);
-            d3.json(url,function(json){
-                //console.log(json.objects.countries.geometries);
-                svg.selectAll('path')
-                    .data(json.features)
-                    .enter().append('path')
-                    .attr("d", geoPath);
-                    
 
+            d3.json(url,function(json){
+                    svg.selectAll('circle')
+                        .data(json.features)
+                        .enter()
+                        .append('circle')
+                      
+                        .attr("cx",function(d){
+                            return aProjection([d.properties.reclong,d.properties.reclat])[0];
+                        })
+                        .attr("cy",function(d){
+                            return aProjection([d.properties.reclong,d.properties.reclat])[1];
+                        })
+                        
+                        .attr("r","3px")
+                        .attr("fill","red")
+                        .attr("position","sticky");
+                      
+
+                    
             });
+
+        var geoUrl = "http://emeeks.github.io/d3ia/world.geojson";
+   
+        d3.json(geoUrl,function createMap(countries){
+                svg.selectAll("path").data(countries.features)
+                .enter()
+                .append("path")
+                .attr("d", geoPath)
+                .attr("class", "countries")
+                .style("fill", "gray");
+                
+        });
 
 
     	</script>
