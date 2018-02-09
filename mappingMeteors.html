@@ -6,6 +6,12 @@
         body{
             background-color: #0845E8;
         }
+        tspan{
+            font-size: 1rem;
+            position: absolute;
+            background-color: red; 
+
+        }
         h1{
             color:white;
             text-align: center;
@@ -70,34 +76,61 @@
                             return aProjection([d.properties.reclong,d.properties.reclat])[1];
                         })
                         .attr("r","3px")
-                        .attr("fill","black")
-                        .attr("position","sticky");
-
-
-                    // text message of information
-                    dots.append("text")
-                        .style('text-anchor','start')
-                        .style('background-color','white')
-                        .attr("x", function(d) { return aProjection([d.properties.reclong,d.properties.reclat])[0]; })
-                        .attr("y", function(d) { return aProjection([d.properties.reclong,d.properties.reclat])[1]; })
-                        .attr('text-anchor',"start")
+                        .attr("fill","black");
                         
-                         .text(function(d,i){
-                            var year = d.properties.year;
+
+
+                    // text message of information need tspan to show in blocks
+                    var textOut = dots.append("text")
+                        .style('text-anchor','start')
+                        .style('background-color','red')
+                        .attr("x", function(d) { return aProjection([d.properties.reclong,d.properties.reclat])[0]; })
+                        .attr("y", function(d) { return aProjection([d.properties.reclong,d.properties.reclat])[1]; });
+                        
+                        textOut.append('tspan')
+                        .text(function(d,i){
                             //console.log(d);
-                            var message = "Fall:"+ d.properties.fall+ "\n"+ "Meteor Mass: "+ d.properties.mass+ "kg" + "\n"+ "Meteor Name:" + d.properties.name + "\n"+ "year: " +  d.properties.year;
-                            console.log(message);
+                            var message = "Fall:"+ d.properties.fall;/* + "\n"+ "Meteor Name:" + d.properties.name + "\n"+ "year: " +  d.properties.year;
+                            console.log(message);*/
                             return message;
 
-                         })  
-                         .style('display','none');
+                         }) 
+                        .attr("x", function(d) { return aProjection([d.properties.reclong,d.properties.reclat])[0]; })
+                        .style('display','none');
+                        textOut.append('tspan')
+                        .text(function(d,i){
+                            return "Mass:" + d.properties.mass + "kg";
+                        })
+                        .attr("x", function(d) { return aProjection([d.properties.reclong,d.properties.reclat])[0]; })
+                        .attr("y", function(d) { return aProjection([d.properties.reclong,d.properties.reclat])[1] +20; })
+                        //.style('text-anchor','middle')
+                        .style('background','red')
+                        .style('display','none');
 
+                        textOut.append('tspan')// tspan helps break text on newline
+                        .text(function(d,i){
+                            return "Name:" + d.properties.name;
+                        })
+                        .attr("x", function(d) { return aProjection([d.properties.reclong,d.properties.reclat])[0]; })
+                        .attr("y", function(d) { return aProjection([d.properties.reclong,d.properties.reclat])[1] +40; })
+                        .style('display','none');
+                        textOut.append('tspan')
+                        
+                        .text(function(d,i){
+                            return "year:" +  d.properties.year;
+                        })
+                        .attr("x", function(d) { return aProjection([d.properties.reclong,d.properties.reclat])[0]; })
+                        .attr("y", function(d) { return aProjection([d.properties.reclong,d.properties.reclat])[1] +60; })
+                        .style('display','none');
+
+           
 
                     // tooltip on dot will show message with information
                     dots.on("mouseenter",function(d,i){
                         console.log("mouse on");
                         dot = d3.select(this);
-                        dot.select('text')
+                        dot.selectAll('tspan') 
+                            //.select('tspan')
                             .style('fill','white')
                             .style("display","block");
                     });
@@ -108,7 +141,8 @@
                         //console.log("mouse out");
                         d3.select(this)
 
-                            .select('text')
+                            .selectAll('tspan')
+                            //.select('tspan')
                             .style('fill','white')
                             .style('display','none');
                     })
