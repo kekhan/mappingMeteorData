@@ -8,23 +8,23 @@
         }
         .text-box{
 
-            background-color: red; 
+            background-color: red;
 
         }
         h1{
             color:white;
             text-align: center;
         }
-        .tooltip {   
+        .tooltip {
               font-family: 'Lato', 'Arial', sans-serif;
-              position: absolute;           
-              text-align: left;           
-              width: auto;                  
-              height: auto;                 
-              padding: 20px;             
+              position: absolute;
+              text-align: left;
+              width: auto;
+              height: auto;
+              padding: 20px;
               font: 5em;
               background: hsla(0, 0%, 100%, .8);
-              pointer-events: none;         
+              pointer-events: none;
               box-shadow: 0 5px 10px hsla(0, 0%, 0%, .2);
               line-height: 1.5em;
 }
@@ -48,7 +48,7 @@
                 .translate([width / 2, height / 2]);
             var geoPath = d3.geo.path().projection(aProjection);
 
-           
+
 
             // svg is box where data is displayed
     	    var svg = d3.selectAll("#wrapper")
@@ -69,19 +69,19 @@
                     .attr("d", geoPath)
                     .attr("class", "map")
                     .style("fill", "gray");
-                    
+
             });
 
 
             // below d3.json parses data of meteors
             d3.json(url,function(json){
                     dots = svg.selectAll('g.dots')
-                        
+
                         .data(json.features)
                         .enter()
                         .append('g')
                         .attr('class','circle');
-                      
+
                     dots.append("circle")
                         .attr("cx",function(d){
                             return aProjection([d.properties.reclong,d.properties.reclat])[0];
@@ -91,34 +91,34 @@
                         })
                         .attr("r","3px")
                         .attr("fill","black");
-                        
+
 
 
                     // text message of information need tspan to show in blocks
                     var textOut = dots
                         .append("text")
                         .style('text-anchor','middle')
-                        
+
                         .attr("x", function(d) { return aProjection([d.properties.reclong,d.properties.reclat])[0]; })
                         .style('position','absolute')
                         .attr("y", function(d) { return aProjection([d.properties.reclong,d.properties.reclat])[1]; })
                         .style('position','absolute');
-                        
+
                         textOut
                         .append('tspan')
-                        
+
                         .text(function(d,i){
                             //console.log(d);
                             var message = "Fall:"+ d.properties.fall;/* + "\n"+ "Meteor Name:" + d.properties.name + "\n"+ "year: " +  d.properties.year;
                             console.log(message);*/
                             return message;
 
-                         }) 
+                         })
                         .attr("x", function(d) { return aProjection([d.properties.reclong,d.properties.reclat])[0]; })
                         .style('position','absolute')
                         .style('display','none');
                         textOut.append('tspan')
-                        
+
                         .text(function(d,i){
                             return "Mass:" + d.properties.mass + "kg";
                         })
@@ -129,7 +129,7 @@
                         //.style('text-anchor','middle')
                         .attr('fill','red')
                         .style('display','none')
-                       
+
 
                         textOut.append('tspan')// tspan helps break text on newline
                         .style('position','absolute')
@@ -142,8 +142,8 @@
                         .style('position','absolute')
                         .style('display','none');
                         textOut.append('tspan')
-                       
-                        
+
+
                         .text(function(d,i){
                             return "year:" +  d.properties.year;
                         })
@@ -156,7 +156,7 @@
                     var div = d3.select("body").append("div")
                         .attr("class", "tooltip")
                         .style("display", "none");
-           
+
 
                     // tooltip on dot will show message with information
                     dots.on("mouseenter",function(d,i){
@@ -164,11 +164,11 @@
                         dot = d3.select(this);
 
 
-                        dot.selectAll('tspan') 
+                        dot.selectAll('tspan')
                             .style('position','absolute')
                             .attr("padding",padding)
                             .style('fill','yellow')
-
+                            .style('font-size','20px')
                             .style("display","inline-block");
                     });
 
