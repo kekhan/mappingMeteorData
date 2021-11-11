@@ -48,7 +48,7 @@
     	    var height = 900;
     	    var padding = 50;
     	    var margin = 50;
-            var aProjection = d3.geo.mercator()
+            var aProjection = d3.geoMercator()
                 .scale(150)
                 .translate([width / 2, height / 2]);
             var geoPath = d3.geo.path().projection(aProjection);
