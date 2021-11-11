@@ -51,7 +51,7 @@
             var aProjection = d3.geoMercator()
                 .scale(150)
                 .translate([width / 2, height / 2]);
-            var geoPath = d3.geo.path().projection(aProjection);
+            var geoPath = d3.geoPath().projection(aProjection);
 
 
 
@@ -63,7 +63,7 @@
     	                .append('g')
     	                .attr('transforn','translate('+ padding +','+ margin +')');
 
-            var geoUrl = "http://emeeks.github.io/d3ia/world.geojson";
+            var geoUrl = "https://emeeks.github.io/d3ia/world.geojson";
 
             // below json is the map
             d3.json(geoUrl,function createMap(map){
